@@ -1,134 +1,48 @@
-# Image Segmentation Project in Python
+# Canny Edge Detection Assignment
 
-This project performs image segmentation and edge detection using Python. The program processes images by performing edge detection, Sobel filtering, colorization (for grayscale images), and segmentation by color. The processed images are saved to an output directory.
+## Overview
 
-## Features
-- **Edge Detection**: Uses Canny edge detection algorithm.
-- **Sobel Filtering**: Applies Sobel filter to detect vertical and horizontal edges.
-    The Sobel operator is used in image processing and computer vision for edge detection. It creates an image that emphasizes edges and transitions in intensity. The Sobel operator uses two 3x3 convolution masks, one for detecting changes in the x-direction (horizontal) and one for detecting changes in the y-direction (vertical). The resulting gradient magnitude at each pixel is a measure of the strength of the edge.
-- **Color Segmentation**: Segments images based on color using HSV color space.
-- **Colorization**: Converts grayscale images to colorized images using color maps.
-- **Grayscale Conversion**: Converts colored images to grayscale.
+This assignment is based on Image Processing. It demonstrates the application of Median Filtering and Canny Edge Detection using NVIDIA's NPP (NVIDIA Performance Primitives) library. These image processing techniques are implemented to leverage GPU acceleration for efficient processing of images.
+medianFilterCannyEdgeNPP is the main folder containing medianFilterCannyEdgeNPP.cpp , which has the code for both the algorithms and the Makefile.
+cmu_face_images is the folder containing the original CMU FACE IMAGES. This dataset has 20 subfolders having 32 images in each folder. These images are images of 20 different people.
+cmu_face_medianFilter is the output folder containing all the images after applying the Median Filter.
+cmu_face_cannyedge is the output folder containing all the images after applying Canny Edge Detection.
+run.sh is also included in the folder and is useful for running the code.
+
+## Dataset
+For the assignment I have used the CMU FACE IMAGES Dataset(https://www.cs.cmu.edu/afs/cs.cmu.edu/project/theo-8/faceimages/faces/). This is one of the datasets mentioned in the Instructions. The images in this dataset are in PGM format, which is similar to the format given in the NPP Box Filtering Laboratory.
+## Techniques Used
+
+1. **Median Filter**: Reduces noise in images by replacing each pixel with the median value from a surrounding window of pixels. I have used this algorithm as it is one of the altenative methods to box filtering.
+2. **Canny Edge Detection**: It identifies edges in images using a multi-stage algorithm involving noise reduction, gradient calculation, non-maximum suppression, and edge tracking by hysteresis. I have used this algorithm for finding edge detection in the input images.
 
 ## Requirements
-- Python 3.6 or higher
-- OpenCV 4.2.0 or higher
 
-## Installation
-1. **Clone the repository**:
-    ```sh
-    git clone https://github.com/yourusername/image-segmentation-python.git
-    cd image-segmentation-python
-    ```
+- CUDA Toolkit
+- NPP Library
+- C++ Compiler
+- Makefile
 
-2. **Install required Python packages**:
-    ```sh
-    pip install -r requirements.txt
-    ```
+## Code Flow
+I have followed the Nvidia Documentation.
+First I have written the function for Median Filter, which basically blurs the images.
+Then I have written the function for Canny Edge Detection, which helps in finding the edges of the faces and the surrounding area.
+Both the functions are called in the main function for creating the output folders.
+medianFilterCannyEdgeNPP.cpp has been commented for code explanation.
+For changing the dataset the path of the input and output folders in the file medianFilterCannyEdgeNPP.cpp should be changed for getting the results.
 
+## How to Run
+Change the directory till medianFilterCannyEdgeNPP Folder.
+cd GPUCoure3-main
+After that run
+1. make clean build
+2. make run
 
-## How to Use
-    first run extract.py to extract the data
-    then run the main.py to process the data
-    
-1. **Place your input images**:
-    - Black and white images should be placed in the `data/initial/textures` directory.
-    - Colored images should be placed in the `data/initial/aerials` directory.
+## Purpose
+1. Median Filtering:
+   The primary purpose for choosing Median Filtering was for reducing the noise in the images.   It helps in smoothening of images by reducing the noise.
+2. Canny Edge Detection:
+   The purpose of choosing Canny Edge Detection was to identify the edges in the images. Edges represent the change in intesity. This could be furhter used for tasks like object detection, object recognition and many other computer vision related tasks.
 
-2. **Run the main script**:
-    ```sh
-    python scripts/main.py
-
-    or run
-    ./run_all.sh in the windows
-    ```
-
-3. **The results**:
-    - Processed black and white images will be saved in the `data/processed/textures` directory.
-    - Processed colored images will be saved in the `data/processed/aerials` directory.
-
-## Explanation of Scripts
-### `scripts/canny_edge_detection.py`
-Performs edge detection using the Canny edge detection algorithm.
-- **Usage**:
-    ```sh
-    python scripts/canny_edge_detection.py <input_image_path> <output_image_path>
-    ```
-
-### `scripts/sobel_filter.py`
-Applies Sobel filter to detect edges.
-- **Usage**:
-    ```sh
-    python scripts/sobel_filter.py <input_image_path> <output_image_path>
-    ```
-
-### `scripts/color_segmentation.py`
-Segments images based on color using the HSV color space.
-- **Usage**:
-    ```sh
-    python scripts/color_segmentation.py <input_image_path> <output_image_path>
-    ```
-
-### `scripts/colorize.py`
-Colorizes grayscale images using a color map.
-- **Usage**:
-    ```sh
-    python scripts/colorize.py <input_image_path> <output_image_path>
-    ```
-
-### `scripts/sobel_horizontal.py`
-Applies Sobel filter to detect horizontal edges.
-- **Usage**:
-    ```sh
-    python scripts/sobel_horizontal.py <input_image_path> <output_image_path>
-    ```
-
-### `scripts/sobel_vertical.py`
-Applies Sobel filter to detect vertical edges.
-- **Usage**:
-    ```sh
-    python scripts/sobel_vertical.py <input_image_path> <output_image_path>
-    ```
-
-### `scripts/convert_to_grayscale.py`
-Converts colored images to grayscale.
-- **Usage**:
-    ```sh
-    python scripts/convert_to_grayscale.py <input_image_path> <output_image_path>
-    ```
-
-### `scripts/main.py`
-The main script that orchestrates the processing of images. It processes all black and white images in `data/initial/textures` and all colored images in `data/initial/aerials`, saving the results in corresponding `data/processed` directories.
-- **Usage**:
-    ```sh
-    python scripts/main.py
-    ```
-    or run make
-    or run ./run_all.bat
-
-### Example Workflow
-1. Place black and white images in `data/initial/textures`.
-2. Place colored images in `data/initial/aerials`.
-3. Run the main script to process all images:
-    ```sh
-    python scripts/main.py
-    ```
-
----
-
-By following these instructions, you should be able to set up and run the image segmentation and edge detection project in Python. The processed images will be saved in the specified output directories, ready for further analysis or use.
-
-TEXTURES
-![texmos3 s512](https://github.com/user-attachments/assets/58cc6b4c-e333-464d-92f9-53407cae1589)
-![texmos3 s512_colorized](https://github.com/user-attachments/assets/ca142120-17ce-4f5b-91ef-c962599456d6)
-![texmos3 s512_edges](https://github.com/user-attachments/assets/7364d490-02df-4baf-81d8-a5d55427c949)
-![texmos3 s512_sobel](https://github.com/user-attachments/assets/0bb8a9f8-91d7-4a72-8bed-73e57676e6c7)
-![texmos3 s512_sobel_horizontal](https://github.com/user-attachments/assets/0b1c488a-1b97-43ef-a992-7956d7d6e6f3)
-![texmos3 s512_sobel_vertical](https://github.com/user-attachments/assets/fe30b511-e7d5-44ac-8274-2959848c06da)
-
-AERIALS
-![2 1 01](https://github.com/user-attachments/assets/623579ac-541a-488b-bdbb-a2ea33f38c00)
-![2 1 01_grayscale](https://github.com/user-attachments/assets/ef26763e-f0c1-4f23-845d-8b3f671e1518)
-![2 1 01_segmented](https://github.com/user-attachments/assets/826a3a3f-2141-4fb0-95e9-b342360f2117)
-
-
+## How to View the Results
+You can view the output images by either install an application like Bitberry File Opener or simply viewing on some PGM file viewer website.
